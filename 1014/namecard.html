@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>個人名片</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', '微軟正黑體', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            display: flex;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+            width: 480px;
+            max-width: 95vw;
+            min-height: 220px;
+        }
+        .card-left {
+            background: linear-gradient(135deg, #ffbea0 30%, #7ed6ff 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            min-width: 140px;
+            padding: 24px 0;
+        }
+ .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 0;
+            overflow: hidden;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            background: #eee;
+            object-fit: cover;
+            /* 換一種貝殼形狀遮罩：上圓弧、下尖角 */
+            clip-path: path('M10,40 Q70,0 130,40 Q140,100 70,135 Q0,100 10,40 Z');
+        }
+        .card-right {
+            flex: 1;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .name {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .title {
+            font-size: 1.1em;
+            color: #6a82fb;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .info {
+            font-size: 1em;
+            color: #555;
+            line-height: 1.7;
+        }
+        @media (max-width: 600px) {
+            .card {
+                flex-direction: column;
+                width: 98vw;
+                min-height: unset;
+            }
+            .card-left {
+                width: 100%;
+                min-width: unset;
+                padding: 24px 0 0 0;
+                justify-content: center;
+            }
+            .card-right {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-left">
+            <img src="pic1027.png" alt="個人照片" class="avatar">
+        </div>
+        <div class="card-right">
+            <div class="name">高佳愉</div>
+            <div class="title">學生</div>
+            <div class="info">
+                Email: cherrycandy.kao@gmail.com<br>
+                電話: 02-6639-6688<br>
+                臺北市大安區和平東路二段134號
+            </div>
+        </div>
+    </div>
+</body>
+</html>
