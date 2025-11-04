@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホームページ</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8ecd4 0%, #f6d6b8 100%);
+            font-family: 'Noto Sans JP', 'Segoe UI', Arial, sans-serif;
+            color: #a67c52;
+            overflow: auto;
+        }
+        .gentle-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        h1 {
+            font-size: 2.5em;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+            color: #a67c52;
+            text-shadow: 0 2px 8px #f8ecd4, 0 2px 16px #f6d6b8;
+        }
+        p {
+            font-size: 1.3em;
+            background: linear-gradient(90deg, #fff6e0 0%, #f8ecd4 100%);
+            border-radius: 12px;
+            padding: 1em 2em;
+            box-shadow: 0 2px 12px #f8ecd4, 0 2px 24px #f6d6b8;
+            color: #a67c52;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+    </style>
+</head>
+<body>
+    <svg class="gentle-bg" viewBox="0 0 800 600" preserveAspectRatio="none">
+        <ellipse cx="400" cy="300" rx="350" ry="180" fill="#f8ecd4" opacity="0.5"/>
+        <ellipse cx="200" cy="500" rx="120" ry="60" fill="#f6d6b8" opacity="0.3"/>
+        <ellipse cx="600" cy="100" rx="80" ry="40" fill="#f8ecd4" opacity="0.3"/>
+        <ellipse cx="650" cy="400" rx="60" ry="30" fill="#f6d6b8" opacity="0.3"/>
+        <ellipse cx="120" cy="120" rx="50" ry="25" fill="#f8ecd4" opacity="0.3"/>
+        <!-- 新增圖案：花朵與葉子 -->
+        <g>
+            <circle cx="700" cy="80" r="18" fill="#fff6e0" stroke="#f8ecd4" stroke-width="3"/>
+            <circle cx="700" cy="80" r="8" fill="#f6d6b8"/>
+            <ellipse cx="720" cy="100" rx="8" ry="18" fill="#f6d6b8" transform="rotate(-30 720 100)"/>
+            <ellipse cx="680" cy="70" rx="6" ry="14" fill="#f6d6b8" transform="rotate(20 680 70)"/>
+        </g>
+        <g>
+            <rect x="60" y="520" width="32" height="32" rx="8" fill="#fff6e0" stroke="#f8ecd4" stroke-width="2"/>
+            <circle cx="76" cy="536" r="8" fill="#f6d6b8"/>
+        </g>
+        <!-- 再加一點簡約圖案：星星與心型 -->
+        <g>
+            <polygon points="120,60 125,75 140,75 128,85 133,100 120,90 107,100 112,85 100,75 115,75" fill="#f8ecd4" opacity="0.7"/>
+            <path d="M180,120 Q185,110 190,120 Q195,130 180,140 Q165,130 170,120 Q175,110 180,120 Z" fill="#f6d6b8" opacity="0.7"/>
+        </g>
+        <!-- 新增日式風鈴圖案 -->
+        <g>
+            <!-- 風鈴主體 -->
+            <ellipse cx="400" cy="80" rx="28" ry="22" fill="#fff6e0" stroke="#f8ecd4" stroke-width="2"/>
+            <!-- 風鈴內部 -->
+            <ellipse cx="400" cy="90" rx="10" ry="6" fill="#f6d6b8" opacity="0.7"/>
+            <!-- 線 -->
+            <rect x="398" y="102" width="4" height="28" rx="2" fill="#f8ecd4"/>
+            <!-- 風鈴吊牌 -->
+            <rect x="392" y="130" width="16" height="36" rx="4" fill="#f6d6b8" opacity="0.7" stroke="#a67c52" stroke-width="1"/>
+            <!-- 吊牌上的花紋 -->
+            <circle cx="400" cy="148" r="4" fill="#fff6e0" opacity="0.8"/>
+            <rect x="398" y="158" width="4" height="8" rx="2" fill="#a67c52" opacity="0.5"/>
+        </g>
+    </svg>
+    <h1>ようこそ、やさしいホームページへ</h1>
+    <p>ここは、心が落ち着く日式の温柔なデザインです。</p>
+</body>
+</html>
