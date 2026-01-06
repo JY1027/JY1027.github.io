@@ -41,22 +41,22 @@
 <!--Banner-->
 <section class="hero-carousel" aria-label="主橫幅：三頁自動翻轉">
   <div class="carousel-inner">
-    <a class="slide active" href="https://jy1027.github.io/oldfinalwebsite" target="_blank" aria-label="橫幅：作品 1">
-      <div class="slide-preview"><iframe src="https://jy1027.github.io/oldfinalwebsite" title="作品 1 預覽"></iframe></div>
-      <div class="slide-caption">作品 1：晨光</div>
+    <a class="slide active" href="https://jy1027.github.io/oldfinalwebsite" target="_blank" aria-label="每週小筆記與心得">
+      <div class="slide-preview"><iframe src="https://jy1027.github.io/oldfinalwebsite" title="每週小筆記與心得"></iframe></div>
+      <div class="slide-caption">每週小筆記與心得</div>
     </a>
 
-    <a class="slide" href="https://jy1027.github.io/1007" target="_blank" aria-label="橫幅：作品 4">
-      <div class="slide-preview"><iframe src="https://jy1027.github.io/1007" title="作品 4 預覽"></iframe></div>
-      <div class="slide-caption">作品 4：小巷咖啡</div>
+    <a class="slide" href="https://jy1027.github.io/1007" target="_blank" aria-label="動物與大自然">
+      <div class="slide-preview"><iframe src="https://jy1027.github.io/1007" title="動物與大自然"></iframe></div>
+      <div class="slide-caption">動物與大自然</div>
     </a>
 
-    <a class="slide" href="https://sites.google.com/stu.ntue.edu.tw/20251125/%E6%B4%BB%E5%8B%95%E8%B3%87%E8%A8%8A" target="_blank" aria-label="橫幅：作品 10">
+    <a class="slide" href="https://sites.google.com/stu.ntue.edu.tw/20251125/%E6%B4%BB%E5%8B%95%E8%B3%87%E8%A8%8A" target="_blank" aria-label="130向前走">
       <div class="slide-preview">
-        <!-- 使用 img 顯示完整的 m1 圖片 -->
-        <img src="m1.png" alt="作品 10 預覽" loading="lazy">
+        <!-- 使用 img 顯示完整的 m1 圖片；加上 cover 類別以填滿旋轉螢幕 -->
+        <img class="cover" src="m1.png" alt="130向前走" loading="lazy">
       </div>
-      <div class="slide-caption">作品 10：日常插畫</div>
+      <div class="slide-caption">130向前走</div>
     </a>
   </div>
 
@@ -97,6 +97,13 @@
   pointer-events:none;
   background-color:transparent;
 }
+
+/* 讓特定 banner 圖片填滿（覆蓋模式） */
+.slide-preview img.cover{
+  object-fit:cover;
+  object-position:center;
+}
+
 /* caption style */
 .slide-caption{position:relative;background:rgba(255,255,255,0.82);padding:10px 12px;border-radius:8px;font-family:"Playfair Display",serif;color:#123b39;box-shadow:0 6px 16px rgba(9,41,39,0.06);}
 /* indicators */
