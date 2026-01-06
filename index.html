@@ -39,6 +39,101 @@
 </style>
 
 <!--Banner-->
+<section class="hero-carousel" aria-label="主橫幅：三頁自動翻轉">
+  <div class="carousel-inner">
+    <a class="slide active" href="https://jy1027.github.io/oldfinalwebsite" target="_blank" aria-label="橫幅：作品 1">
+      <div class="slide-preview"><iframe src="https://jy1027.github.io/oldfinalwebsite" title="作品 1 預覽"></iframe></div>
+      <div class="slide-caption">作品 1：晨光</div>
+    </a>
+
+    <a class="slide" href="https://jy1027.github.io/1007" target="_blank" aria-label="橫幅：作品 4">
+      <div class="slide-preview"><iframe src="https://jy1027.github.io/1007" title="作品 4 預覽"></iframe></div>
+      <div class="slide-caption">作品 4：小巷咖啡</div>
+    </a>
+
+    <a class="slide" href="https://sites.google.com/stu.ntue.edu.tw/20251125/%E6%B4%BB%E5%8B%95%E8%B3%87%E8%A8%8A" target="_blank" aria-label="橫幅：作品 10">
+      <div class="slide-preview">
+        <!-- 使用 img 顯示完整的 m1 圖片 -->
+        <img src="m1.png" alt="作品 10 預覽" loading="lazy">
+      </div>
+      <div class="slide-caption">作品 10：日常插畫</div>
+    </a>
+  </div>
+
+  <div class="carousel-indicators" role="tablist" aria-hidden="true">
+    <button class="indicator active" data-index="0" aria-label="切換到第1頁"></button>
+    <button class="indicator" data-index="1" aria-label="切換到第2頁"></button>
+    <button class="indicator" data-index="2" aria-label="切換到第3頁"></button>
+  </div>
+</section>
+
+<style>
+/* Banner: 文青風自動輪播 */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+.hero-carousel{max-width:1000px;margin:18px auto;padding:0 20px;}
+.carousel-inner{position:relative;height:320px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#fffdf9,#f7fbf8);box-shadow:0 8px 26px rgba(15,36,33,0.06);border:1px solid rgba(13,103,102,0.05);}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:18px;gap:12px;text-decoration:none;color:inherit;opacity:0;transform:scale(1.01);transition:opacity .6s ease, transform .6s ease;pointer-events:none;}
+.slide.active{opacity:1;transform:scale(1);pointer-events:auto;}
+.slide-preview{position:absolute;inset:0;border-radius:12px;overflow:hidden;background:#f6f6f3;}
+.slide-preview iframe{width:100%;height:100%;border:0;pointer-events:none;filter:grayscale(.03) contrast(.98);transform:scale(.99);}
+
+/* new: ensure banner images show the whole image and don't capture clicks */
+.slide-preview img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  border:0;
+  pointer-events:none;
+  background-color:transparent;
+}
+/* caption style */
+.slide-caption{position:relative;background:rgba(255,255,255,0.82);padding:10px 12px;border-radius:8px;font-family:"Playfair Display",serif;color:#123b39;box-shadow:0 6px 16px rgba(9,41,39,0.06);}
+/* indicators */
+.carousel-indicators{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.indicator{width:10px;height:10px;border-radius:50%;background:rgba(10,60,58,0.12);border:0;cursor:pointer}
+.indicator.active{background:rgba(10,60,58,0.8)}
+/* responsive */
+@media (max-width:880px){ .carousel-inner{height:240px;} .slide-caption{font-size:0.95rem;} }
+@media (max-width:520px){ .carousel-inner{height:160px;} .slide-caption{font-size:0.9rem;padding:8px;} }
+
+/* respect reduced motion */
+@media (prefers-reduced-motion: reduce){ .slide{transition:none} }
+</style>
+
+<script>
+(function(){
+  let slides = [], indicators = [], idx = 0, timer = null;
+  function show(i){
+    slides.forEach((s,j)=>{ s.classList.toggle('active', j===i); s.setAttribute('aria-hidden', j===i ? 'false' : 'true'); });
+    indicators.forEach((b,j)=>b.classList.toggle('active', j===i));
+    idx = i;
+  }
+  function next(){ show((idx + 1) % slides.length); }
+  function start(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stop();
+    timer = setInterval(next, 2500);
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    slides = Array.from(document.querySelectorAll('.hero-carousel .slide'));
+    indicators = Array.from(document.querySelectorAll('.hero-carousel .indicator'));
+    indicators.forEach(btn => btn.addEventListener('click', ()=> show(Number(btn.dataset.index))));
+    show(0);
+    start();
+    const root = document.querySelector('.hero-carousel');
+    if(root){
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+    }
+  });
+})();
+</script>
 
 <!--Main-->
 <main class="site-main">
