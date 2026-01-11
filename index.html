@@ -340,6 +340,22 @@
   .card-preview{height:110px;}
   .site-main{margin:18px auto;}
 }
+/* 1. 強制背景圖案：使用 CSS 直接繪製手帳方格紋，不依賴圖片網址 */
+html  {.
+  background-color: #f8f8f6 ; /* 文青米色底 */
+  background-image: 
+    linear-gradient(rgba(0, 88, 31, 0.199) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 88, 31, 0.199) 1px, transparent 1px) ;
+  background-size: 25px 25px ; /* 方格大小 */
+  background-attachment: fixed ;
+}
+
+/* 2. 確保 body 不會用白底擋住背景 */
+body {
+  background: transparent ;
+}
+
+
 </style>
 
 <!--Footer-->
