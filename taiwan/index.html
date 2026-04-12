@@ -24,8 +24,11 @@ h1 {color: white;}
 .heart-btn.liked {
   color: #e74c3c;
 }
+.w3-container .w3-row {
+  flex-wrap: nowrap;
+}
 @media (max-width: 900px) {
-  .w3-row {
+  .w3-row:not(.w3-container .w3-row) {
     display: flex;
     flex-direction: column;
   }
@@ -60,7 +63,7 @@ and is wrapped around the whole page content, except for the footer in this exam
 <!-- Header -->
 <header class="w3-container w3-center w3-padding-32"> 
   <h1 style="display: flex; align-items: center; justify-content: center;"><img src="2.png" style="height: 1.4em; margin-left: 20px;"><b>蹲點‧臺灣</b><img src="1.png" style="height: 1.2em; margin-left: 20px;"></h1>
-  <p style="color: white;">歡迎翻閱網站- <span class="w3-tag" style="background-color: #65a5bb;">數一數二</span></p>
+  <p style="color: white;">歡迎翻閱專屬網站- <span class="w3-tag" style="background-color: #65a5bb;">數一數二</span></p>
 </header>
 
 <!-- Grid -->
@@ -80,10 +83,10 @@ and is wrapped around the whole page content, except for the footer in this exam
       <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed
         tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       <div class="w3-row">
-        <div class="w3-col m8 s12">
+        <div class="w3-col m8 s8">
           <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
         </div>
-        <div class="w3-col m4 w3-hide-small">
+        <div class="w3-col m4 s4">
           <p><span class="w3-padding-large w3-right"><span class="heart-btn" onclick="toggleHeart(this)">♥</span></span></p>
         </div>
       </div>
@@ -103,10 +106,10 @@ and is wrapped around the whole page content, except for the footer in this exam
       <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed
         tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       <div class="w3-row">
-        <div class="w3-col m8 s12">
+        <div class="w3-col m8 s8">
           <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
         </div>
-        <div class="w3-col m4 w3-hide-small">
+        <div class="w3-col m4 s4">
           <p><span class="w3-padding-large w3-right"><span class="heart-btn" onclick="toggleHeart(this)">♥</span></span></p>
         </div>
       </div>
@@ -122,7 +125,8 @@ and is wrapped around the whole page content, except for the footer in this exam
   <img src="3.png" style="width:100%">
     <div class="w3-container w3-white">
       <h4><b>團隊介紹</b></h4>
-      <p>大家好，我們是數一數二！我們的隊呼是「一加一大於二」，我們的行動理念是「與社區相見，不只要看見，更要被看見」。</p>
+      <p>大家好，我們是數一數二！我們的隊呼是「一加一大於二」。</p>
+      <p>與社區相見，不只要看見，更要被看見。</p>
     </div>
   </div><hr>
   
@@ -135,22 +139,17 @@ and is wrapped around the whole page content, except for the footer in this exam
       <li class="w3-padding-16">
         <img src="f.png" alt="Image" class="w3-left w3-margin-right" style="width:50px">
         <span class="w3-large">05/16「蹲點‧台灣」面試</span><br>
-        <span>「數一數二」已經做好準備，希望評審們喜歡我們的創意，也祝福自己面試順利，加油！</span>
+        <span>「數一數二」已做好準備，希望評審們喜歡我們，也祝福我們面試順利，加油!</span>
       </li>
       <li class="w3-padding-16">
         <img src="s.png" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-        <span class="w3-large">Ipsum</span><br>
-        <span>Praes tinci sed</span>
-      </li> 
-      <li class="w3-padding-16">
-        <img src="n.png" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-        <span class="w3-large">Dorum</span><br>
-        <span>Ultricies congue</span>
-      </li>   
+        <span class="w3-large">數一數二正式上架</span><br>
+        <span>推薦欣賞社區願景、規劃和問答!</span>
+      </li>  
       <li class="w3-padding-16">
         <img src="c.png" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-        <span class="w3-large">Mingsum</span><br>
-        <span>Lorem ipsum dipsum</span>
+        <span class="w3-large">恭喜通過一階</span><br>
+        <span>「數一數二」通過書面審查，我們會再接再厲!</span>
       </li>  
     </ul>
   </div>
