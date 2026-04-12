@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數一數二|Q&A</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 微软雅黑, sans-serif;
+            background-color: #5285ac;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        
+
+        .container {
+            flex: 1;
+            padding: 40px 40px 40px 70px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #FFB3B3;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .content-section {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 30px;
+        }
+
+        .text-pair {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+            padding: 15px 0 15px 70px;
+            width: 100vw;
+            position: relative;
+            left: -70px;
+            background-color: white;
+        }
+
+        .text-pair.white-bg {
+            background-color: white;
+        }
+
+        .text-line {
+            padding: 15px 0;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: transparent;
+            user-select: none;
+            text-align: left;
+        }
+
+        .text-line.clear {
+            font-weight: normal;
+            filter: blur(0px);
+            background-color: transparent;
+        }
+
+        .text-line.blurred {
+            filter: blur(5px);
+            background-color: transparent;
+            font-weight: bold;
+        }
+
+        .text-line:hover {
+            background-color: transparent;
+            transform: translateX(5px);
+        }
+
+        .text-line.blurred:hover {
+            filter: blur(2px);
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+       footer {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        footer p {
+            margin: 0;
+            color: white;
+        }
+        
+        .footer-btn {
+            background-color: #005580;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+        
+        .footer-btn:hover {
+            background-color: #214f72;
+            transform: scale(1.05);
+        }
+
+        .hint {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+   
+
+    <div class="container">
+        <h1>Q&A</h1>
+
+        <div class="content-section">
+            <div class="text-pair white-bg">
+                <div class="text-line clear">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+                <div class="text-line blurred" onclick="toggleBlur(this)">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+            </div>
+            <div class="text-pair white-bg">
+                <div class="text-line clear">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+                <div class="text-line blurred" onclick="toggleBlur(this)">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+            </div>
+            <div class="text-pair white-bg">
+                <div class="text-line clear">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+                <div class="text-line blurred" onclick="toggleBlur(this)">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+            </div>
+            <div class="text-pair white-bg">
+                <div class="text-line clear">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+                <div class="text-line blurred" onclick="toggleBlur(this)">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+            </div>
+            <div class="text-pair white-bg">
+                <div class="text-line clear">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+                <div class="text-line blurred" onclick="toggleBlur(this)">
+                    <span class="content">在這裡輸入您的文字...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Footer -->
+    <footer>
+        <a href="https://jy1027.github.io/taiwan/" class="footer-btn" target="_blank">上一頁</a>
+    </footer>
+
+    <script>
+        // 切換模糊效果
+        function toggleBlur(element) {
+            element.classList.toggle('blurred');
+            element.classList.toggle('clear');
+        }
+    </script>
+</body>
+</html>
