@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>導航網頁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #5285ac;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 20px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #FFB3B3;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        footer {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        footer p {
+            margin: 0;
+            color: white;
+        }
+        
+        .footer-btn {
+            background-color: #005580;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+        
+        .footer-btn:hover {
+            background-color: #214f72;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .button-row {
+                gap: 15px;
+            }
+            
+            .btn {
+                min-width: 90%;
+                max-width: 400px;
+                padding: 18px 36px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main -->
+    <main>
+        <div class="button-container">
+            <!-- 第一排 - 3個按鈕 -->
+            <div class="button-row">
+                <a href="https://jy1027.github.io/0930" class="btn" target="_blank">特色活動</a>
+                <a href="https://jy1027.github.io/1007" class="btn" target="_blank">寫作+藝術</a>
+                <a href="https://jy1027.github.io/1014/ex1.html" class="btn" target="_blank">藝術+數位</a>
+            </div>
+
+            <!-- 第二排 - 3個按鈕 -->
+            <div class="button-row">
+                <a href="https://jy1027.github.io/1014/namecard.html" class="btn" target="_blank">藝術</a>
+                <a href="https://jy1027.github.io/1021" class="btn" target="_blank">數位</a>
+                <a href="https://jy1027.github.io/1118" class="btn" target="_blank">禮賓</a>
+            </div>
+
+            <!-- 第三排 - 2個按鈕 -->
+            <div class="button-row">
+                <a href="https://jy1027.github.io/" class="btn" target="_blank">課輔</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <a href="https://jy1027.github.io/" class="footer-btn" target="_blank">上一頁</a>
+    </footer>
+   
+
+
+</body>
+</html>
+<!--Main-->
+<!--Footer-->
+</style>
