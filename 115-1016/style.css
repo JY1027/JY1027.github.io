@@ -1,0 +1,246 @@
+/* 全域重設與背景設定 */ 
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+} 
+
+body { 
+    font-family: "Segoe UI", Arial, sans-serif; 
+    background-color: #E1E6B9; /* 淺草綠色背景 */ 
+    color: #778A50; /* 統一使用規定色碼 */ 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+} 
+
+/* 網頁主容器：寬度 940px */ 
+.container { 
+    width: 940px; 
+    margin: 0 auto; 
+} 
+
+/* 1. 頁首區域 (Header) */ 
+header { 
+    width: 100%; 
+    height: 44px; 
+    margin-top: 53px; /* 上間距 53px */ 
+    margin-bottom: 20px; /* 下間距 20px */ 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+} 
+
+.logo { 
+    font-size: 36px; 
+    font-weight: bold; 
+    color: #778A50; /* 規定色碼 */ 
+} 
+
+/* 右上角功能按鈕與社群區 */ 
+.header-right { 
+    display: flex; 
+    align-items: center; 
+    height: 25px; /* 與元件高度對齊 */ 
+} 
+
+/* 社群圖示組 (每個 25*25，間距 10) */ 
+.social-icons { 
+    display: flex; 
+    gap: 10px; /* 規定間距 10px */ 
+} 
+
+.icon-link { 
+    width: 25px; /* 規定尺寸 25px */ 
+    height: 25px; /* 規定尺寸 25px */ 
+    background-color: #778A50; /* 規定色碼 */ 
+    border-radius: 3px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-decoration: none; 
+    overflow: hidden; /* 防止圖片超出圓角 */ 
+} 
+
+/* 社群圖片控制 */ 
+.icon-link img { 
+    width: 25px; 
+    height: 25px; 
+    object-fit: contain; /* 確保圖示不變形且完整呈現 */ 
+    display: block; 
+} 
+
+/* 按鈕之間的垂直線 */ 
+.separator-line { 
+    width: 1px; 
+    height: 25px; 
+    background-color: #778A50; 
+    margin: 0 10px; /* 兩側皆間距 10px */ 
+} 
+
+/* LOGIN / JOIN 按鈕組 */ 
+.btn-group { 
+    display: flex; 
+    gap: 10px; /* 規定按鈕間距 10px */ 
+} 
+
+.nav-btn { 
+    height: 25px; /* 規定高度 25px */ 
+    background: transparent; 
+    border: 1px solid #778A50; /* 線條粗細 1px，色碼 778A50 */ 
+    border-radius: 3px; 
+    color: #778A50; /* 規定色碼 */ 
+    font-family: "Arial Black", Gadget, sans-serif; /* 規定字體：Arial Black */ 
+    font-size: 12px; /* 規定大小 12px */ 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+} 
+
+.btn-login { 
+    width: 60px; /* 規定寬度 60px */ 
+} 
+
+.btn-join { 
+    width: 50px; /* 規定寬度 50px */ 
+} 
+
+/* 2. 導覽列 (Navbar) */ 
+nav { 
+    width: 100%; 
+    height: 43px; /* 高 43 pixel */ 
+    background-color: #778A50; /* 規定色碼 */ 
+    display: flex; 
+    align-items: center; 
+    padding-left: 30px; 
+    margin-bottom: 20px; 
+} 
+
+nav a { 
+    color: #FFFFFF; 
+    text-decoration: none; 
+    margin-right: 40px; 
+    font-weight: bold; 
+    font-size: 14px; 
+} 
+
+/* 3. 主視覺大圖區 */ 
+.main-banner { 
+    width: 100%; 
+    height: 448px; 
+    margin-bottom: 30px; 
+} 
+
+.main-banner img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* 確保圖片不變形且填滿區塊 */ 
+    display: block; 
+} 
+
+/* 4. 下方雙欄區塊 */ 
+.content-wrapper { 
+    display: flex; 
+    justify-content: space-between; 
+    width: 100%; 
+    margin-bottom: 35px; 
+} 
+
+.section-title { 
+    width: 445px; 
+    height: 45px; 
+    background-color: #778A50; /* 規定色碼 */ 
+    color: #FFFFFF; 
+    display: flex; 
+    align-items: center; 
+    padding-left: 20px; 
+    font-size: 15px; 
+    font-weight: bold; 
+} 
+
+/* 左欄：Vegetables 圖片區 */ 
+.left-section { 
+    width: 445px; 
+} 
+
+.image-grid { 
+    display: flex; 
+    gap: 12px; 
+    margin-top: 15px; 
+} 
+
+/* 圖片與下方方塊的外層包裹器 */
+.grid-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* 完美黏在一起，無任何縫隙 */
+}
+
+.grid-item { 
+    width: 140px; 
+    height: 140px; 
+    display: block; 
+} 
+
+.grid-item img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* 確保正方形小圖不變形 */ 
+    display: block; 
+} 
+
+/* 新增的三個下方空白方塊 */
+.new-blank-box {
+    width: 140px;
+    height: 85px; 
+    background-color: #EEF3D2; 
+}
+
+/* 右欄：Contact 聯絡資訊區 */ 
+.right-section { 
+    width: 445px; 
+} 
+
+.contact-box { 
+    width: 445px; 
+    height: 225px; /* 精準微調高度，與左欄貼齊 */
+    background-color: #EEF3D2; 
+    margin-top: 15px; 
+    padding: 18px; 
+    font-size: 12px; 
+    line-height: 1.6; 
+    color: #778A50; /* 規定色碼 */ 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 讓上下文字分布均勻 */
+} 
+
+/* 【修改點】內部新增的細線外框樣式 */
+.contact-inner-card {
+    border: 1px solid #778A50; /* 與內文同色系的 1px 細線框 */
+    padding: 22px 18px; /* 方塊內部間距 */
+    margin-top: 12px;
+    height: 105px; /* 固定方塊高度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px; /* E-mail 與 PHONE 之間的行距 */
+}
+
+.contact-inner-card p {
+    margin-bottom: 0; /* 移除內部預設段落底間距 */
+}
+
+/* 5. 頁尾 */ 
+footer { 
+    width: 100%; 
+    height: 60px; 
+    background-color: #778A50; /* 規定色碼 */ 
+    color: #E1E6B9; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 11px; 
+    letter-spacing: 0.5px; 
+}
