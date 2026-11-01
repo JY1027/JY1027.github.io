@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>DTD 風格五秒狂暴大轉盤 - 正中央結果彈窗版</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: transparent; margin: 0; overflow: hidden; }
+        .container { text-align: center; background: transparent; padding: 0; box-shadow: none; position: relative; }
+        
+        #canvas { margin: 20px 0; max-width: 100%; display: block; }
+        button { padding: 12px 28px; font-size: 18px; cursor: pointer; background: #2ed573; color: white; border: none; border-radius: 8px; font-weight: bold; transition: 0.2s; }
+        button:hover { background: #26af5f; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #spinBtn { background: #ff4757; }
+        #spinBtn:hover { background: #ff6b81; }
+        textarea { width: 90%; height: 60px; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; background: rgba(255,255,255,0.9); }
+        #status { font-size: 20px; font-weight: bold; margin-top: 15px; color: #fff; min-height: 42px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
+
+        /* 螢幕正中央結果彈窗樣式 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7); /* 半透明黑底 */
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 999;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-content {
+            background: white; padding: 40px 60px; border-radius: 20px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.7); transition: transform 0.3s ease;
+            border: 4px solid #ff4757;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        
+        .modal-content h3 { font-size: 24px; color: #666; margin: 0 0 10px 0; }
+        .modal-content .winner-text { font-size: 48px; font-weight: bold; color: #ff4757; margin: 10px 0 25px 0; word-break: break-all; }
+        .modal-content button { background: #1e90ff; font-size: 16px; padding: 10px 24px; }
+        .modal-content button:hover { background: #1180ef; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <textarea id="options" placeholder="請輸入選項，用逗號或換行隔開">選項一, 選項二, 選項三, 選項四, 選項五, 選項六, 選項七, 選項八</textarea><br>
+    <button id="updateBtn">更新選項</button>
+    <br>
+    <canvas id="canvas" width="550" height="550"></canvas>
+    <br>
+    <button id="spinBtn">開始抽籤！</button>
+    <div id="status"></div>
+</div>
+
+<!-- 螢幕正中央的彈窗 HTML 結構 -->
+<div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+        <h3>🎉 最終抽中結果 🎉</h3>
+        <div class="winner-text" id="winnerText">選項一</div>
+        <button onclick="closeModal()">確認並關閉</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const updateBtn = document.getElementById('updateBtn');
+    const optionsTextarea = document.getElementById('options');
+    const statusDiv = document.getElementById('status');
+    const resultModal = document.getElementById('resultModal');
+    const winnerText = document.getElementById('winnerText');
+
+    let options = [];
+    const colors = ['#87CEFA', '#Eecc68', '#D81B60', '#FFE4B5', '#FFB6C1', '#C1E1C1', '#E6E6FA', '#FF69B4'];
+    const lightColors = ['#FFF700', '#FF0000', '#00BFFF', '#32CD32', '#FFFFFF'];
+    
+    let startAngle = 0;
+    let arc = 0;
+    let spinTimeout = null;
+    let spinAngleStart = 10;
+    let spinTime = 0;
+    
+    const CONSTANT_SPEED_TIME = 3000; // 精準維持 5 秒最高速
+    const DECELERATION_TIME = 2000;    // 1.5 秒內減速煞車
+    let spinTimeTotal = CONSTANT_SPEED_TIME + DECELERATION_TIME; 
+
+    let lightTick = 0;
+
+    function getOptions() {
+        options = optionsTextarea.value.split(/[,\n]/).map(s => s.trim()).filter(s => s.length > 0);
+        arc = Math.PI / (options.length / 2);
+        drawWheel();
+    }
+
+    function drawWheel() {
+        if (options.length === 0) return;
+        ctx.clearRect(0, 0, 550, 550);
+        
+        const cx = 275, cy = 275;
+        const outerR = 250; 
+        const wheelR = 225; 
+
+        // 1. 外圍深藍色裝飾圈
+        ctx.fillStyle = "#4A6FA5";
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. 內部各個馬卡龍色扇形
+        for(let i = 0; i < options.length; i++) {
+            const angle = startAngle + i * arc;
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, wheelR, angle, angle + arc, false);
+            ctx.lineTo(cx, cy);
+            ctx.fill();
+
+            // 畫扇形內的文字
+            ctx.save();
+            ctx.fillStyle = "#333333";
+            ctx.font = "bold 16px sans-serif";
+            ctx.translate(cx + Math.cos(angle + arc / 2) * (wheelR * 0.65), cy + Math.sin(angle + arc / 2) * (wheelR * 0.65));
+            ctx.rotate(angle + arc / 2 + Math.PI / 2);
+            const text = options[i];
+            ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+            ctx.restore();
+        }
+
+        // 3. 外圍跑馬燈
+        const totalLights = 40; 
+        lightTick++;
+        for (let i = 0; i < totalLights; i++) {
+            const angle = (i / totalLights) * Math.PI * 2;
+            const lx = cx + Math.cos(angle) * (outerR - 12);
+            const ly = cy + Math.sin(angle) * (outerR - 12);
+
+            let colorIndex = (i + Math.floor(lightTick / 5)) % lightColors.length;
+            ctx.fillStyle = lightColors[colorIndex];
+            
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = lightColors[colorIndex];
+
+            if (i % 2 === 0) {
+                ctx.beginPath();
+                ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.strokeStyle = lightColors[colorIndex];
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(lx - 5, ly); ctx.lineTo(lx + 5, ly);
+                ctx.moveTo(lx, ly - 5); ctx.lineTo(lx, ly + 5);
+                ctx.stroke();
+            }
+            ctx.shadowBlur = 0; 
+        }
+
+        // 4. 中心 DTD 標誌圓心
+        ctx.fillStyle = "#4A6FA5"; 
+        ctx.beginPath();
+        ctx.arc(cx, cy, 42, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#FFFFFF"; 
+        ctx.beginPath();
+        ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.save();
+        ctx.fillStyle = "#1e90ff"; 
+        ctx.font = "bold 24px 'Arial Black', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowBlur = 2;
+        ctx.shadowColor = "rgba(0,0,0,0.2)";
+        ctx.fillText("DTD", cx, cy + 2); 
+        ctx.restore();
+
+        // 5. 上方固定紅色小指針
+        ctx.fillStyle = "#ff4757";
+        ctx.beginPath();
+        ctx.moveTo(cx - 15, cy - outerR - 5);
+        ctx.lineTo(cx + 15, cy - outerR - 5);
+        ctx.lineTo(cx, cy - outerR + 25);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    setInterval(() => {
+        if (spinTimeout === null) {
+            drawWheel();
+        }
+    }, 40);
+
+    function rotateWheel() {
+        spinTime += 16; 
+        if(spinTime >= spinTimeTotal) {
+            stopRotateWheel();
+            return;
+        }
+        
+        let currentSpeed;
+        if (spinTime < CONSTANT_SPEED_TIME) {
+            currentSpeed = spinAngleStart;
+        } else {
+            const decelElapsedTime = spinTime - CONSTANT_SPEED_TIME;
+            currentSpeed = spinAngleStart - easeOut(decelElapsedTime, 0, spinAngleStart, DECELERATION_TIME);
+        }
+
+        startAngle += (currentSpeed * Math.PI / 180);
+        drawWheel();
+        spinTimeout = setTimeout(rotateWheel, 16); 
+    }
+
+    function stopRotateWheel() {
+        clearTimeout(spinTimeout);
+        spinTimeout = null;
+        const degrees = startAngle * 180 / Math.PI + 90;
+        const ardegrees = arc * 180 / Math.PI;
+        const index = Math.floor((360 - (degrees % 360)) / ardegrees);
+        const finalResult = options[(index + options.length) % options.length];
+        
+        // 1. 清空底下小狀態
+        statusDiv.innerHTML = "";
+        // 2. 將抽中內容塞入正中央彈窗
+        winnerText.innerHTML = finalResult;
+        // 3. 啟動螢幕正中央的遮罩彈窗
+        resultModal.classList.add('active');
+        
+        spinBtn.disabled = false;
+    }
+
+    function closeModal() {
+        resultModal.classList.remove('active');
+    }
+
+    function easeOut(t, b, c, d) {
+        const ts = (t /= d) * t;
+        const tc = ts * t;
+        return b + c * (tc + -3 * ts + 3 * t);
+    }
+
+    spinBtn.addEventListener('click', () => {
+        if (options.length === 0) return;
+        statusDiv.innerHTML = "🔥 5秒超極速維持中！！！";
+        spinBtn.disabled = true;
+        spinAngleStart = Math.random() * 15 + 85; 
+        spinTime = 0;
+        rotateWheel();
+    });
+
+    updateBtn.addEventListener('click', getOptions);
+    getOptions();
+</script>
+</body>
+</html>
