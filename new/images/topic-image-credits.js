@@ -18,11 +18,11 @@ window.TOPIC_IMAGE_CREDITS = {
     },
     {
       "file": "images/attractions/03-chiang-kai-shek-memorial.jpg",
-      "title": "Chiang Kai-shek Memorial Hall Station, Taipei, 2024.jpg",
-      "author": "Another Believer",
-      "license": "CC BY-SA 4.0",
-      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AChiang_Kai-shek_Memorial_Hall_Station%2C_Taipei%2C_2024.jpg"
+      "title": "ChiangKai-shek memorial2009 amk.jpg",
+      "author": "AngMoKio",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AChiangKai-shek_memorial2009_amk.jpg"
     },
     {
       "file": "images/attractions/04-ximending.jpg",
@@ -74,11 +74,11 @@ window.TOPIC_IMAGE_CREDITS = {
     },
     {
       "file": "images/attractions/10-rongjin.jpg",
-      "title": "Former British Consular Residence - Flickr - rvandermaar.jpg",
-      "author": "Rutger van der Maar from Leiden, The Netherlands",
-      "license": "CC BY 2.0",
-      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AFormer_British_Consular_Residence_-_Flickr_-_rvandermaar.jpg"
+      "title": "錦町日式宿舍─林務局局長舊宿舍.JPG",
+      "author": "Pbdragonwang",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E9%8C%A6%E7%94%BA%E6%97%A5%E5%BC%8F%E5%AE%BF%E8%88%8D%E2%94%80%E6%9E%97%E5%8B%99%E5%B1%80%E5%B1%80%E9%95%B7%E8%88%8A%E5%AE%BF%E8%88%8D.JPG"
     },
     {
       "file": "images/attractions/11-chifeng-street.jpg",
@@ -194,11 +194,11 @@ window.TOPIC_IMAGE_CREDITS = {
     },
     {
       "file": "images/attractions/25-ningxia-night-market.jpg",
-      "title": "Darral Willis (Taipei Taishin Mars Taste of Taiwan Battlefield 2025 at Ningxia Night Market).jpg",
-      "author": "Rico Shen",
+      "title": "202608 Ningxia Road Night Market 02.jpg",
+      "author": "Jonashtand",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ADarral_Willis_%28Taipei_Taishin_Mars_Taste_of_Taiwan_Battlefield_2025_at_Ningxia_Night_Market%29.jpg"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3A202608_Ningxia_Road_Night_Market_02.jpg"
     }
   ],
   "foods": [
@@ -236,11 +236,11 @@ window.TOPIC_IMAGE_CREDITS = {
     },
     {
       "file": "images/foods/05-scallion-pancake.jpg",
-      "title": "2009-03-21 Flaky scallion pancakes vendor in Taipei.jpg",
-      "author": "Banzai Hiroaki",
+      "title": "Plate of scallion pancakes.jpg",
+      "author": "Infrogmation of New Orleans",
       "license": "CC BY 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3A2009-03-21_Flaky_scallion_pancakes_vendor_in_Taipei.jpg"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APlate_of_scallion_pancakes.jpg"
     },
     {
       "file": "images/foods/06-stinky-tofu.jpg",
@@ -252,11 +252,11 @@ window.TOPIC_IMAGE_CREDITS = {
     },
     {
       "file": "images/foods/07-bubble-tea.jpg",
-      "title": "Bubble tea boba close-up banner.jpg",
-      "author": "Toby Oxborrow",
-      "license": "CC BY-SA 2.0",
-      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABubble_tea_boba_close-up_banner.jpg"
+      "title": "Pearl Milk Tea in Chun Shui Tang.jpg",
+      "author": "Battlesnake1",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APearl_Milk_Tea_in_Chun_Shui_Tang.jpg"
     },
     {
       "file": "images/foods/08-fried-chicken.jpg",
