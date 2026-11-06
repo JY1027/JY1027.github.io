@@ -34,8 +34,8 @@
   const persistentKey = signedInUser?.email
     ? `${storageKey}${encodeURIComponent(signedInUser.email)}`
     : null;
-  const optionLimits = { gacha: 10, wheel: 5, claw: 5 };
-  const defaults = readPageOptions().slice(0, optionLimits[tool] || Infinity);
+  const legacyOptionLimits = { gacha: 10, wheel: 5, claw: 5 };
+  const defaults = readPageOptions();
   const defaultGroups = readPageGroups();
   const defaultRarities = readPageCardRarities();
   const defaultOptions = defaults.map((value) => ({
@@ -47,10 +47,8 @@
     options: defaultOptions.map((option) => ({ ...option })),
     groups: defaultGroups.map((group) => ({
       ...group,
-      options: group.options
-        .slice(0, optionLimits[tool] || Infinity)
-        .map((option) => ({ ...option })),
-      remaining: expandOptions(group.options.slice(0, optionLimits[tool] || Infinity)),
+      options: group.options.map((option) => ({ ...option })),
+      remaining: expandOptions(group.options),
     })),
     slotOverrides: [],
     noReplacement: false,
@@ -230,7 +228,20 @@
       if (typeof saved.noReplacement === 'boolean') state.noReplacement = saved.noReplacement;
       if (typeof saved.sound === 'boolean') state.sound = saved.sound;
       if (Array.isArray(saved.remaining)) state.remaining = saved.remaining;
+      else if (Array.isArray(saved.options)) state.remaining = expandOptions(state.options);
       if (Array.isArray(saved.records)) state.records = saved.records;
+      if (!state.groups.length && Array.isArray(saved.options)) {
+        const restored = restorePreviouslyTruncatedDefaults(
+          state.options,
+          state.remaining,
+          saved.options,
+          defaultOptions,
+        );
+        if (restored) {
+          state.options = restored.options;
+          state.remaining = restored.remaining;
+        }
+      }
       clampState();
     } catch (error) {
       console.error('讀取自訂筆記本資料失敗。', error);
@@ -259,6 +270,25 @@
       }
       return null;
     }).filter(Boolean);
+  }
+
+  function restorePreviouslyTruncatedDefaults(options, remaining, storedOptions, defaults) {
+    const limit = legacyOptionLimits[tool];
+    if (
+      !Number.isInteger(limit) ||
+      storedOptions.length !== limit ||
+      options.length !== limit ||
+      defaults.length <= limit ||
+      !options.every((option, index) => option.value === defaults[index]?.value)
+    ) {
+      return null;
+    }
+
+    const restoredOptions = defaults.slice(limit).map((option) => ({ ...option }));
+    return {
+      options: [...options, ...restoredOptions],
+      remaining: [...remaining, ...expandOptions(restoredOptions)],
+    };
   }
 
   function loadSavedGroups(saved) {
@@ -290,11 +320,18 @@
             remaining: Array.isArray(stored.remaining) ? stored.remaining : [],
           };
         }
-        return {
-          ...group,
-          options: normalizeSavedOptions(stored.options),
-          remaining: Array.isArray(stored.remaining) ? stored.remaining : [],
-        };
+        const options = normalizeSavedOptions(stored.options);
+        const remaining = Array.isArray(stored.remaining) ? stored.remaining : expandOptions(options);
+        const defaultGroup = defaultGroups.find((item) => item.key === group.key);
+        const restored = restorePreviouslyTruncatedDefaults(
+          options,
+          remaining,
+          stored.options,
+          defaultGroup?.options || [],
+        );
+        if (restored) return { ...group, ...restored };
+
+        return { ...group, options, remaining };
       });
       return;
     }
@@ -576,10 +613,8 @@
       if (state.groups.length) {
         state.groups = defaultGroups.map((group) => ({
           ...group,
-          options: group.options
-            .slice(0, optionLimits[tool] || Infinity)
-            .map((option) => ({ ...option })),
-          remaining: expandOptions(group.options.slice(0, optionLimits[tool] || Infinity)),
+          options: group.options.map((option) => ({ ...option })),
+          remaining: expandOptions(group.options),
         }));
         state.slotOverrides = [];
       }
