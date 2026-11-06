@@ -1,0 +1,393 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 18px 10px;
+    overflow-x: hidden;
+
+    background-color: #ffeef2;
+    background-image:
+        radial-gradient(circle at 12px 12px, rgba(255,255,255,.9) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 42px 38px, rgba(244,181,201,.45) 0 2px, transparent 3px),
+        radial-gradient(circle at 78px 72px, rgba(255,255,255,.75) 0 3px, transparent 4px),
+        radial-gradient(circle at 105px 20px, rgba(244,181,201,.35) 0 1.5px, transparent 2.5px),
+        linear-gradient(135deg, #fff4f7 0%, #ffeaf1 48%, #fff1f5 100%);
+
+    background-size:
+        120px 120px,
+        150px 150px,
+        180px 180px,
+        130px 130px,
+        auto;
+}
+
+/* 上下星星裝飾 */
+body::before,
+body::after {
+    content: "✦     ✧       ✦        ✧";
+    position: fixed;
+    left: 0;
+    width: 100%;
+    color: #e8b2c3;
+    font-size: 17px;
+    letter-spacing: 24px;
+    text-align: center;
+    opacity: .55;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::before {
+    top: 7%;
+}
+
+body::after {
+    content: "✧       ✦        ✧      ✦";
+    bottom: 7%;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.wheel-window {
+    position: relative;
+    padding: 0;
+    margin: 0 auto 25px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#canvas {
+    display: block;
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+    margin: auto;
+}
+
+/* 開始按鈕 */
+#spinBtn {
+    min-width: 210px;
+    padding: 16px 30px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 18px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(180deg, #ff829f, #f04475);
+    box-shadow: 0 6px 0 #c92d5b;
+    text-shadow: 1px 2px 2px rgba(130, 30, 60, 0.25);
+    transition: transform 0.15s, filter 0.15s;
+}
+
+#spinBtn:hover {
+    background: linear-gradient(180deg, #ff9db4, #fa5d89);
+    transform: translateY(-2px);
+}
+
+#spinBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #c92d5b;
+}
+
+#spinBtn:disabled {
+    background: #ccc;
+    box-shadow: 0 4px 0 #aaa;
+    cursor: not-allowed;
+}
+
+#winner {
+    min-height: 35px;
+    margin-top: 22px;
+    color: #c34c78;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* ===== 中獎彈出視窗 ===== */
+
+.result-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    background: rgba(115, 65, 83, 0.22);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+.result-overlay.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-box {
+    position: relative;
+    width: min(88%, 480px);
+    min-height: 145px;
+    padding: 20px 30px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+
+    background: linear-gradient(135deg, #fffdfd, #fff0f5);
+    border: 2px solid #edbdce;
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 0 6px rgba(255,255,255,0.45),
+        0 12px 35px rgba(190, 105, 135, 0.25);
+
+    animation: popIn 0.4s cubic-bezier(.2, 1.4, .4, 1);
+}
+
+.result-box::before {
+    content: "✦";
+    position: absolute;
+    top: 13px;
+    left: 20px;
+    color: #e8b2c3;
+    font-size: 20px;
+}
+
+.result-box::after {
+    content: "✧";
+    position: absolute;
+    bottom: 10px;
+    right: 22px;
+    color: #e8b2c3;
+    font-size: 23px;
+}
+
+.result-title {
+    color: #c77f9a;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
+
+.result-text {
+    color: #b94e78;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.75);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===== 新手教學 ===== */
+
+.tutorial-card {
+    position: fixed;
+    z-index: 2000;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(92%, 460px);
+    padding: 23px 22px;
+
+    background: linear-gradient(145deg, #fff, #fff1f5);
+    border: 3px solid #f3b5c8;
+    border-radius: 23px;
+    box-shadow: 0 8px 25px rgba(166,91,119,.2);
+
+    text-align: center;
+    color: #896174;
+}
+
+.tutorial-card.hidden {
+    display: none;
+}
+
+.tutorial-step {
+    color: #d77b9c;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 9px;
+}
+
+.tutorial-title {
+    color: #bd6688;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tutorial-description {
+    color: #896174;
+    font-size: 14px;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.tutorial-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin: 17px 0;
+}
+
+.progress-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #efd2dc;
+}
+
+.progress-dot.active {
+    background: #df7e9f;
+    transform: scale(1.25);
+}
+
+/* 教學按鈕排列 */
+.tutorial-actions {
+    display: flex;
+    gap: 9px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* 開始教學按鈕 */
+.tutorial-button {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 10px;
+    color: white;
+    background: linear-gradient(135deg, #f58eae, #e56d94);
+    font-size: 14px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 7px rgba(217,78,121,.2);
+    transition: .2s;
+}
+
+.tutorial-button:hover {
+    filter: brightness(1.05);
+}
+
+.tutorial-button:active {
+    transform: scale(.97);
+}
+
+.tutorial-button:disabled {
+    opacity: .55;
+    cursor: default;
+}
+
+/* 跳過教學按鈕 */
+.tutorial-skip-button {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 10px;
+    color: white;
+    background: linear-gradient(135deg, #91d6a1, #5caf73);
+    font-size: 14px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 7px rgba(76,160,100,.25);
+    transition: .2s;
+}
+
+.tutorial-skip-button:hover {
+    filter: brightness(1.05);
+}
+
+.tutorial-skip-button:active {
+    transform: scale(.97);
+}
+
+.tutorial-hint {
+    margin-top: 12px;
+    color: #c18b9e;
+    font-size: 12px;
+}
+
+/* 教學高亮 */
+#canvas.tutorial-highlight {
+    filter: drop-shadow(0 0 9px #ed83a8);
+}
+
+#spinBtn.tutorial-highlight {
+    position: relative;
+    z-index: 1001;
+    outline: 4px solid #f3a3bd;
+    outline-offset: 7px;
+    animation: tutorialPulse 1.2s infinite;
+}
+
+@keyframes tutorialPulse {
+    0%, 100% {
+        outline-color: rgba(243,163,189,.45);
+    }
+    50% {
+        outline-color: rgba(243,163,189,1);
+    }
+}
+
+@media (max-width: 480px) {
+    #spinBtn {
+        width: 90%;
+    }
+
+    .result-box {
+        width: 92%;
+        min-height: 130px;
+    }
+
+    .result-text {
+        font-size: 27px;
+    }
+
+    .tutorial-card {
+        top: 12px;
+        padding: 18px 16px;
+    }
+}

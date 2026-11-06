@@ -35,6 +35,7 @@
     ? `${storageKey}${encodeURIComponent(signedInUser.email)}`
     : null;
   const legacyOptionLimits = { gacha: 10, wheel: 5, claw: 5 };
+  const pageData = window.PickMePageData || {};
   const defaults = readPageOptions();
   const defaultGroups = readPageGroups();
   const defaultRarities = readPageCardRarities();
@@ -70,30 +71,20 @@
   let resultTimer;
 
   function readPageOptions() {
-    const scripts = [...document.scripts].map((script) => script.textContent).join('\n');
     const names = [
       'options', 'destinations', 'species', 'colors', 'accessories', 'people',
       'locations', 'activities', 'styles', 'luckyItems', 'fashionStyles',
       'outfitStyles', 'characterStyles', 'desserts', 'mains', 'drinks',
     ];
-    const values = [];
-
-    for (const name of names) {
-      const declaration = new RegExp(`\\b(?:const|let|var)\\s+${name}\\s*=\\s*\\[`, 'g');
-      let found;
-      while ((found = declaration.exec(scripts))) {
-        const content = readBalanced(scripts, declaration.lastIndex - 1, '[', ']');
-        if (content !== null) values.push(...readStringValues(content));
-      }
+    const values = names.flatMap((name) => Array.isArray(pageData[name]) ? pageData[name] : []);
+    if (pageData.cardPool && typeof pageData.cardPool === 'object') {
+      values.push(...Object.values(pageData.cardPool).flat());
     }
 
-    const poolMatch = /\b(?:const|let|var)\s+cardPool\s*=\s*\{/g.exec(scripts);
-    if (poolMatch) {
-      const content = readBalanced(scripts, poolMatch.index + poolMatch[0].lastIndexOf('{'), '{', '}');
-      if (content !== null) values.push(...readStringValues(content));
-    }
-
-    const uniqueValues = [...new Set(values.map((value) => value.trim()).filter(Boolean))]
+    const uniqueValues = [...new Set(values
+      .filter((value) => typeof value === 'string')
+      .map((value) => value.trim())
+      .filter(Boolean))]
       .filter((value) => !value.startsWith('#') && !/^(?:SSR|SR|R)$/.test(value));
 
     if (uniqueValues.length) return uniqueValues;
@@ -104,16 +95,13 @@
 
   function readPageCardRarities() {
     if (tool !== 'card') return new Map();
-    const scripts = [...document.scripts].map((script) => script.textContent).join('\n');
     const rarities = new Map();
-    const declaration = /\b(?:SSR|SR|R)\s*:\s*\[/g;
-    let found;
-    while ((found = declaration.exec(scripts))) {
-      const rarity = found[0].match(/SSR|SR|R/)[0];
-      const content = readBalanced(scripts, declaration.lastIndex - 1, '[', ']');
-      if (content === null) continue;
-      readStringValues(content).forEach((value) => {
-        if (!rarities.has(value)) rarities.set(value, rarity);
+    if (pageData.cardPool && typeof pageData.cardPool === 'object') {
+      Object.entries(pageData.cardPool).forEach(([rarity, values]) => {
+        if (!Array.isArray(values)) return;
+        values.forEach((value) => {
+          if (!rarities.has(value)) rarities.set(value, rarity);
+        });
       });
     }
     return rarities;
@@ -154,15 +142,12 @@
     };
     const definitions = groupNames[`${topic}:${tool}`];
     if (!definitions) return [];
-    const scripts = [...document.scripts].map((script) => script.textContent).join('\n');
     return definitions.map(([name, label]) => {
-      const declaration = new RegExp(`\\b(?:const|let|var)\\s+${name}\\s*=\\s*\\[`, 'g');
-      const found = declaration.exec(scripts);
-      if (!found) {
+      const values = pageData[name];
+      if (!Array.isArray(values)) {
         console.error(`找不到「${label}」選項資料，請確認頁面資料設定。`);
         return { key: name, label, options: [] };
       }
-      const values = readStringValues(readBalanced(scripts, declaration.lastIndex - 1, '[', ']') || '');
       return {
         key: name,
         label,
@@ -170,41 +155,6 @@
           .map((value) => ({ value, quantity: 1 })),
       };
     });
-  }
-
-  function readBalanced(source, start, opening, closing) {
-    let depth = 0;
-    let quote = '';
-    let escaped = false;
-    for (let index = start; index < source.length; index += 1) {
-      const character = source[index];
-      if (quote) {
-        if (escaped) escaped = false;
-        else if (character === '\\') escaped = true;
-        else if (character === quote) quote = '';
-        continue;
-      }
-      if (character === '"' || character === "'" || character === '`') {
-        quote = character;
-      } else if (character === opening) {
-        depth += 1;
-      } else if (character === closing && --depth === 0) {
-        return source.slice(start + 1, index);
-      }
-    }
-    return null;
-  }
-
-  function readStringValues(source) {
-    const values = [];
-    const strings = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g;
-    let found;
-    while ((found = strings.exec(source))) {
-      const raw = found[0];
-      const value = raw.slice(1, -1).replace(/\\(['"`\\])/g, '$1').trim();
-      if (value && !value.startsWith('#')) values.push(value);
-    }
-    return values;
   }
 
   function loadSavedState() {

@@ -1,0 +1,131 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 18px 10px;
+    min-height: 100vh;
+    background: #fff0f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: "Microsoft JhengHei", sans-serif;
+    user-select: none;
+    background-image:
+        radial-gradient(circle at 12px 12px, rgba(255,255,255,.9) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 42px 38px, rgba(244,181,201,.45) 0 2px, transparent 3px),
+        radial-gradient(circle at 78px 72px, rgba(255,255,255,.75) 0 3px, transparent 4px),
+        radial-gradient(circle at 105px 20px, rgba(244,181,201,.35) 0 1.5px, transparent 2.5px),
+        linear-gradient(135deg, #fff4f7 0%, #ffeaf1 48%, #fff1f5 100%);
+    background-size: 120px 120px, 150px 150px, 180px 180px, 130px 130px, auto;
+}
+
+#game-machine {
+    width: 100%;
+    max-width: 470px;
+    background: white;
+    border: 4px solid #ffccd5;
+    border-radius: 24px;
+    padding: 18px 14px;
+    box-shadow: 0 12px 28px rgba(255,182,193,.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.canvas-container {
+    width: 100%;
+    border: 5px solid #ffccd5;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff0f3;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.result {
+    width: 100%;
+    min-height: 58px;
+    margin-top: 12px;
+    padding: 12px 8px;
+    border-radius: 12px;
+    background: #fff0f5;
+    color: #d94e79;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-line;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.control-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.joystick {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    position: relative;
+    background: radial-gradient(circle, #ffe7ef, #f3b3cc);
+    border: 4px solid #ffb5cb;
+    box-shadow: inset 0 3px 9px #c77c9c55;
+    touch-action: none;
+    cursor: grab;
+}
+
+.stick {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: linear-gradient(145deg, white, #e9a3c1);
+    border: 2px solid #d77fa5;
+    box-shadow: 0 3px 6px #a75b7c66;
+    pointer-events: none;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.btn:active {
+    transform: scale(.95);
+}
+
+.btn-drop {
+    background: #ff4d6d;
+}
+
+.btn-reset {
+    background: #b99bd8;
+}

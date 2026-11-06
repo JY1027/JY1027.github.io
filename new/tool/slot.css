@@ -1,0 +1,513 @@
+
+* { box-sizing: border-box; }
+
+:root {
+    --pink: #f58ba8;
+    --deep-pink: #d95e83;
+    --light-pink: #fff0f4;
+    --border-pink: #f5c4d2;
+    --cream: #fffaf0;
+    --gold: #d8ad69;
+    --brown: #896174;
+}
+
+.svg-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 35px 12px;
+    background:
+        radial-gradient(circle at 10% 15%, #ffffff 0 2px, transparent 3px),
+        radial-gradient(circle at 90% 80%, #ffffff 0 3px, transparent 4px),
+        #ffeef2;
+    background-size: 42px 42px, 55px 55px;
+    font-family: "Microsoft JhengHei", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--brown);
+    overflow-x: hidden;
+}
+
+/* ===== 機臺 ===== */
+
+.wrapper {
+    width: 100%;
+    max-width: 660px;
+    padding-right: 75px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.machine {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(145deg, #ffffff, #fff9fb);
+    border: 5px solid #f4c3d1;
+    border-radius: 36px;
+    padding: 18px;
+    box-shadow:
+        0 13px 0 #e8aabd,
+        0 20px 35px rgba(184,105,135,.22),
+        inset 0 0 0 3px white;
+    z-index: 2;
+}
+
+.machine-inner {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg,#fff1f5,#ffe8ef);
+    border: 2px solid #f5c5d4;
+    border-radius: 25px;
+    padding: 22px 17px 20px;
+}
+
+.corner {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border: 2px solid #e9b4c5;
+    opacity: .75;
+}
+
+.corner.tl {
+    top: 8px; left: 8px;
+    border-right: 0; border-bottom: 0;
+    border-radius: 12px 0 0 0;
+}
+
+.corner.tr {
+    top: 8px; right: 8px;
+    border-left: 0; border-bottom: 0;
+    border-radius: 0 12px 0 0;
+}
+
+.corner.bl {
+    bottom: 8px; left: 8px;
+    border-right: 0; border-top: 0;
+    border-radius: 0 0 0 12px;
+}
+
+.corner.br {
+    bottom: 8px; right: 8px;
+    border-left: 0; border-top: 0;
+    border-radius: 0 0 12px 0;
+}
+
+.top-decoration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 8px;
+}
+
+.top-decoration .line {
+    height: 2px;
+    width: 45px;
+    background: #e9b6c6;
+}
+
+.top-star {
+    color: #d7a75e;
+    font-size: 15px;
+}
+
+.light-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 17px 0 15px;
+}
+
+.light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f5c66e;
+    border: 2px solid white;
+    box-shadow: 0 0 5px #f6d78e;
+}
+
+.light:nth-child(even) {
+    background: white;
+}
+
+/* ===== 轉輪 ===== */
+
+.reels-container {
+    position: relative;
+    display: flex;
+    gap: clamp(7px,2.5vw,15px);
+    justify-content: center;
+    align-items: center;
+    padding: clamp(13px,3vw,20px);
+    background: linear-gradient(180deg,#fffdfc,#fff7f8);
+    border: 4px solid #eab6c8;
+    border-radius: 22px;
+    box-shadow: inset 0 4px 10px rgba(176,110,135,.12),
+                0 4px 0 #f4d4df;
+    margin-bottom: 15px;
+}
+
+.reels-container::before,
+.reels-container::after {
+    content: "✦";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #d8ad69;
+    font-size: 14px;
+}
+
+.reels-container::before { left: 5px; }
+.reels-container::after { right: 5px; }
+
+.reel-window {
+    flex: 1;
+    min-width: 0;
+    max-width: 125px;
+    aspect-ratio: 1;
+    background: linear-gradient(145deg,#fffaf5,#fff0f3);
+    border: 3px solid #f0c4d0;
+    border-radius: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: inset 0 3px 9px rgba(176,110,135,.12),
+                0 3px 0 #f7dce5;
+}
+
+.symbol {
+    width: 76%;
+    height: 76%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.symbol svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 3px 2px rgba(125,79,91,.12));
+}
+
+.wrapper.spinning .symbol:not(.stopped) {
+    animation: symbolFlash .12s infinite alternate;
+}
+
+@keyframes symbolFlash {
+    from { transform: translateY(-5px) scale(.94); opacity:.75; }
+    to { transform: translateY(5px) scale(1.04); opacity:1; }
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 18px 0;
+    color: #d7a75e;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    width: 55px;
+    height: 1px;
+    background: #e8b8c7;
+}
+
+.message {
+    min-height: 46px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #d9577b;
+    font-weight: bold;
+    font-size: clamp(14px,3.5vw,19px);
+    letter-spacing: 1px;
+}
+
+/* ===== 拉桿 ===== */
+
+.handle-container {
+    position: absolute;
+    right: 0;
+    top: 34%;
+    width: 75px;
+    height: 190px;
+    cursor: grab;
+    z-index: 3;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.handle-container:active { cursor: grabbing; }
+
+.handle-base {
+    position: absolute;
+    left: 0;
+    top: 80px;
+    width: 30px;
+    height: 43px;
+    border: 3px solid white;
+    border-radius: 8px;
+    background: linear-gradient(135deg,#f8c2d1,#df94ac);
+    box-shadow: 0 4px 0 #d78ba5,
+                0 5px 8px rgba(120,75,90,.15);
+}
+
+.handle-rod {
+    position: absolute;
+    left: 12px;
+    bottom: 82px;
+    width: 13px;
+    height: 95px;
+    border: 1px solid #d6c1c5;
+    border-radius: 10px;
+    background: linear-gradient(90deg,#c8b8bd,#fff 35%,#e4d5d9 75%,#bca9af);
+    transform-origin: bottom center;
+    transition: transform .35s cubic-bezier(.25,1,.5,1);
+    box-shadow: 2px 3px 5px rgba(90,65,75,.2);
+}
+
+.handle-container.dragging .handle-rod {
+    transition: none;
+}
+
+.handle-ball {
+    position: absolute;
+    top: -25px;
+    left: -17px;
+    width: 46px;
+    height: 46px;
+    border: 3px solid white;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 32% 25%,#fff8fb 0 8%,transparent 10%),
+        radial-gradient(circle at 35% 30%,#ffcfdd,#f27f9f 60%,#d95e83);
+    box-shadow: 0 4px 0 #d65e82,
+                0 6px 12px rgba(210,90,125,.3),
+                inset 0 2px 5px rgba(255,255,255,.8);
+}
+
+.wrapper.spinning .handle-rod {
+    transform: rotate(32deg);
+}
+
+.wrapper.spinning .handle-container {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* ===== 新手教學 ===== */
+
+.tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(68,38,54,.58);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.tutorial-highlight {
+    position: relative !important;
+    z-index: 21 !important;
+    box-shadow:
+        0 0 0 5px #fff,
+        0 0 0 10px #f28aa9,
+        0 0 25px 12px rgba(255,154,189,.9) !important;
+    animation: tutorialGlow 1s infinite alternate;
+}
+
+@keyframes tutorialGlow {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.15); }
+}
+
+.handle-container.tutorial-highlight {
+    cursor: grab;
+}
+
+.reels-container.tutorial-highlight {
+    border-color: #f28aa9;
+}
+
+.tutorial-card {
+    position: relative;
+    z-index: 50;
+    width: min(92%,460px);
+    margin: 35px auto 0;
+    padding: 23px 22px;
+    background: linear-gradient(145deg,#fff,#fff1f5);
+    border: 3px solid #f3b5c8;
+    border-radius: 23px;
+    box-shadow: 0 8px 25px rgba(166,91,119,.2);
+    text-align: center;
+    color: #896174;
+}
+
+.tutorial-card.hidden {
+    display: none;
+}
+
+.tutorial-step {
+    color: #d77b98;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 9px;
+}
+
+.tutorial-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #d9577b;
+    margin-bottom: 10px;
+}
+
+.tutorial-description {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #98768a;
+    min-height: 50px;
+}
+
+/* ===== 進度條：與夾娃娃機教學相同格式 ===== */
+
+.tutorial-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    margin-bottom: 0;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    background: #ead2dc;
+    transition: all .3s ease;
+}
+
+.progress-dot.active {
+    width: 23px;
+    background: #ed83a3;
+    box-shadow: 0 0 7px rgba(237,131,163,.5);
+}
+
+/* ===== 教學按鈕排列 ===== */
+
+.tutorial-actions {
+    display: flex;
+    gap: 9px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* 開始教學按鈕 */
+.tutorial-button {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 10px;
+    color: white;
+    background: linear-gradient(135deg, #f58eae, #e56d94);
+    font-size: 14px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 7px rgba(217,78,121,.2);
+    transition: .2s;
+}
+
+.tutorial-button:hover {
+    filter: brightness(1.05);
+}
+
+.tutorial-button:active {
+    transform: scale(.97);
+}
+
+.tutorial-button:disabled {
+    opacity: .55;
+    cursor: default;
+}
+
+/* 跳過教學按鈕 */
+.tutorial-skip-button {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 10px;
+    color: white;
+    background: linear-gradient(135deg, #91d6a1, #5caf73);
+    font-size: 14px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 7px rgba(76,160,100,.25);
+    transition: .2s;
+}
+
+.tutorial-skip-button:hover {
+    filter: brightness(1.05);
+}
+
+.tutorial-skip-button:active {
+    transform: scale(.97);
+}
+
+.tutorial-hint {
+    color: #d47e99;
+    font-size: 12px;
+    margin-top: 12px;
+    min-height: 0;
+}
+
+/* ===== 手機版 ===== */
+
+@media(max-width:480px) {
+    body { padding: 25px 8px; }
+
+    .wrapper { padding-right: 48px; }
+
+    .machine {
+        padding: 11px;
+        border-radius: 27px;
+    }
+
+    .machine-inner { padding: 17px 9px; }
+
+    .handle-container {
+        transform: scale(.76);
+        transform-origin: right center;
+    }
+
+    .reels-container { padding: 12px 9px; }
+
+    .reel-window { border-radius: 12px; }
+
+    .tutorial-card { margin-top: 30px; }
+}
