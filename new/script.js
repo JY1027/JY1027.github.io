@@ -759,29 +759,13 @@
   const loader = $('#loader');
   const homepageIntroScreen = $('#homepageIntroScreen');
   const homepageIntroVideo = $('#homepageIntroVideo');
-  const reloadIntentKey = 'pickme_home_intro_reload';
-  let reloadRequested = false;
+  const homepageIntroSeenKey = 'pickme_home_intro_seen';
+  let shouldPlayHomepageIntro = true;
   try {
-    reloadRequested = sessionStorage.getItem(reloadIntentKey) === 'true';
-    sessionStorage.removeItem(reloadIntentKey);
+    shouldPlayHomepageIntro = localStorage.getItem(homepageIntroSeenKey) !== 'true';
   } catch (error) {
-    console.error('無法讀取首頁重新載入狀態。', error);
+    console.error('無法讀取首頁影片播放狀態。', error);
   }
-  window.addEventListener('keydown', (event) => {
-    const isReloadShortcut = event.key === 'F5'
-      || ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'r');
-    if (!isReloadShortcut) return;
-    try {
-      sessionStorage.setItem(reloadIntentKey, 'true');
-    } catch (error) {
-      console.error('無法記錄首頁重新載入狀態。', error);
-    }
-  });
-  const navigationEntry = window.performance?.getEntriesByType?.('navigation')?.[0];
-  const legacyNavigationType = window.performance?.navigation?.type;
-  const shouldPlayHomepageIntro = reloadRequested
-    || navigationEntry?.type === 'reload'
-    || legacyNavigationType === 1;
   const startHomepageIntro = () => {
     if (!homepageIntroScreen || !homepageIntroVideo) {
       document.body.classList.remove('loading');
@@ -812,10 +796,22 @@
     homepageIntroVideo.currentTime = 0;
     const playback = homepageIntroVideo.play();
     if (playback) {
-      playback.catch((error) => {
+      playback.then(() => {
+        try {
+          localStorage.setItem(homepageIntroSeenKey, 'true');
+        } catch (error) {
+          console.error('無法儲存首頁影片播放狀態。', error);
+        }
+      }).catch((error) => {
         console.error('首頁影片無法自動播放。', error);
         finish();
       });
+    } else {
+      try {
+        localStorage.setItem(homepageIntroSeenKey, 'true');
+      } catch (error) {
+        console.error('無法儲存首頁影片播放狀態。', error);
+      }
     }
   };
   const imgsReady = Promise.all($$('img').map((im) => im.complete ? 0 : new Promise((r) => { im.onload = im.onerror = r; })));
