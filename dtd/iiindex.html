@@ -1,255 +1,818 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title>DTD 風格五秒狂暴大轉盤 - 正中央結果彈窗版</title>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: transparent; margin: 0; overflow: hidden; }
-        .container { text-align: center; background: transparent; padding: 0; box-shadow: none; position: relative; }
-        
-        #canvas { margin: 20px 0; max-width: 100%; display: block; }
-        button { padding: 12px 28px; font-size: 18px; cursor: pointer; background: #2ed573; color: white; border: none; border-radius: 8px; font-weight: bold; transition: 0.2s; }
-        button:hover { background: #26af5f; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-        #spinBtn { background: #ff4757; }
-        #spinBtn:hover { background: #ff6b81; }
-        textarea { width: 90%; height: 60px; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; background: rgba(255,255,255,0.9); }
-        #status { font-size: 20px; font-weight: bold; margin-top: 15px; color: #fff; min-height: 42px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幸運抽籤轉盤</title>
 
-        /* 螢幕正中央結果彈窗樣式 */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); /* 半透明黑底 */
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 999;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .modal-content {
-            background: white; padding: 40px 60px; border-radius: 20px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.7); transition: transform 0.3s ease;
-            border: 4px solid #ff4757;
-        }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        
-        .modal-content h3 { font-size: 24px; color: #666; margin: 0 0 10px 0; }
-        .modal-content .winner-text { font-size: 48px; font-weight: bold; color: #ff4757; margin: 10px 0 25px 0; word-break: break-all; }
-        .modal-content button { background: #1e90ff; font-size: 16px; padding: 10px 24px; }
-        .modal-content button:hover { background: #1180ef; }
-    </style>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 18px 10px;
+    overflow-x: hidden;
+
+    background-color: #ffeef2;
+    background-image:
+        radial-gradient(circle at 12px 12px, rgba(255,255,255,.9) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 42px 38px, rgba(244,181,201,.45) 0 2px, transparent 3px),
+        radial-gradient(circle at 78px 72px, rgba(255,255,255,.75) 0 3px, transparent 4px),
+        radial-gradient(circle at 105px 20px, rgba(244,181,201,.35) 0 1.5px, transparent 2.5px),
+        linear-gradient(135deg, #fff4f7 0%, #ffeaf1 48%, #fff1f5 100%);
+
+    background-size:
+        120px 120px,
+        150px 150px,
+        180px 180px,
+        130px 130px,
+        auto;
+}
+
+/* 上下星星裝飾 */
+body::before,
+body::after {
+    content: "✦     ✧       ✦        ✧";
+    position: fixed;
+    left: 0;
+    width: 100%;
+    color: #e8b2c3;
+    font-size: 17px;
+    letter-spacing: 24px;
+    text-align: center;
+    opacity: .55;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::before {
+    top: 7%;
+}
+
+body::after {
+    content: "✧       ✦        ✧      ✦";
+    bottom: 7%;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.wheel-window {
+    position: relative;
+    padding: 0;
+    margin: 0 auto 25px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#canvas {
+    display: block;
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+    margin: auto;
+}
+
+/* 開始按鈕 */
+#spinBtn {
+    min-width: 210px;
+    padding: 16px 30px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 18px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(180deg, #ff829f, #f04475);
+    box-shadow: 0 6px 0 #c92d5b;
+    text-shadow: 1px 2px 2px rgba(130, 30, 60, 0.25);
+    transition: transform 0.15s, filter 0.15s;
+}
+
+#spinBtn:hover {
+    background: linear-gradient(180deg, #ff9db4, #fa5d89);
+    transform: translateY(-2px);
+}
+
+#spinBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #c92d5b;
+}
+
+#spinBtn:disabled {
+    background: #ccc;
+    box-shadow: 0 4px 0 #aaa;
+    cursor: not-allowed;
+}
+
+#winner {
+    min-height: 35px;
+    margin-top: 22px;
+    color: #c34c78;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* ===== 中獎彈出視窗 ===== */
+
+.result-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    background: rgba(115, 65, 83, 0.22);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+.result-overlay.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-box {
+    position: relative;
+    width: min(88%, 480px);
+    min-height: 145px;
+    padding: 20px 30px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+
+    background: linear-gradient(135deg, #fffdfd, #fff0f5);
+    border: 2px solid #edbdce;
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 0 6px rgba(255,255,255,0.45),
+        0 12px 35px rgba(190, 105, 135, 0.25);
+
+    animation: popIn 0.4s cubic-bezier(.2, 1.4, .4, 1);
+}
+
+.result-box::before {
+    content: "✦";
+    position: absolute;
+    top: 13px;
+    left: 20px;
+    color: #e8b2c3;
+    font-size: 20px;
+}
+
+.result-box::after {
+    content: "✧";
+    position: absolute;
+    bottom: 10px;
+    right: 22px;
+    color: #e8b2c3;
+    font-size: 23px;
+}
+
+.result-title {
+    color: #c77f9a;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
+
+.result-text {
+    color: #b94e78;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.75);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===== 新手教學 ===== */
+
+.tutorial-card {
+    position: fixed;
+    z-index: 2000;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(92%, 460px);
+    padding: 23px 22px;
+
+    background: linear-gradient(145deg, #fff, #fff1f5);
+    border: 3px solid #f3b5c8;
+    border-radius: 23px;
+    box-shadow: 0 8px 25px rgba(166,91,119,.2);
+
+    text-align: center;
+    color: #896174;
+}
+
+.tutorial-card.hidden {
+    display: none;
+}
+
+.tutorial-step {
+    color: #d77b9c;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 9px;
+}
+
+.tutorial-title {
+    color: #bd6688;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tutorial-description {
+    color: #896174;
+    font-size: 14px;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.tutorial-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin: 17px 0;
+}
+
+.progress-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #efd2dc;
+}
+
+.progress-dot.active {
+    background: #df7e9f;
+    transform: scale(1.25);
+}
+
+.tutorial-button {
+    border: 0;
+    border-radius: 30px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg,#f5a2b9,#df7094);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #d16b8b;
+    transition: .2s;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tutorial-button:hover {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+}
+
+.tutorial-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #d16b8b;
+}
+
+.tutorial-hint {
+    margin-top: 12px;
+    color: #c18b9e;
+    font-size: 12px;
+}
+
+/* 教學高亮 */
+#canvas.tutorial-highlight {
+    filter: drop-shadow(0 0 9px #ed83a8);
+}
+
+#spinBtn.tutorial-highlight {
+    position: relative;
+    z-index: 1001;
+    outline: 4px solid #f3a3bd;
+    outline-offset: 7px;
+    animation: tutorialPulse 1.2s infinite;
+}
+
+@keyframes tutorialPulse {
+    0%, 100% {
+        outline-color: rgba(243,163,189,.45);
+    }
+    50% {
+        outline-color: rgba(243,163,189,1);
+    }
+}
+
+@media (max-width: 480px) {
+    #spinBtn {
+        width: 90%;
+    }
+
+    .result-box {
+        width: 92%;
+        min-height: 130px;
+    }
+
+    .result-text {
+        font-size: 27px;
+    }
+
+    .tutorial-card {
+        top: 12px;
+        padding: 18px 16px;
+    }
+}
+</style>
 </head>
+
 <body>
+
 <div class="container">
-    <textarea id="options" placeholder="請輸入選項，用逗號或換行隔開">選項一, 選項二, 選項三, 選項四, 選項五, 選項六, 選項七, 選項八</textarea><br>
-    <button id="updateBtn">更新選項</button>
-    <br>
-    <canvas id="canvas" width="550" height="550"></canvas>
-    <br>
-    <button id="spinBtn">開始抽籤！</button>
-    <div id="status"></div>
+
+    <div class="wheel-window">
+        <canvas id="canvas" width="550" height="550"></canvas>
+    </div>
+
+    <button id="spinBtn">開始旋轉</button>
+
+    <div id="winner"></div>
+
 </div>
 
-<!-- 螢幕正中央的彈窗 HTML 結構 -->
-<div class="modal-overlay" id="resultModal">
-    <div class="modal-content">
-        <h3>🎉 最終抽中結果 🎉</h3>
-        <div class="winner-text" id="winnerText">選項一</div>
-        <button onclick="closeModal()">確認並關閉</button>
+<!-- 中獎彈出視窗 -->
+<div class="result-overlay" id="resultOverlay">
+    <div class="result-box">
+        <div class="result-title">✦ 抽中啦 ✦</div>
+        <div class="result-text" id="resultText"></div>
     </div>
 </div>
 
+<!-- 新手教學 -->
+<div class="tutorial-card" id="tutorialCard">
+
+    <div class="tutorial-step" id="tutorialStep">
+        新手教學
+    </div>
+
+    <div class="tutorial-title" id="tutorialTitle">
+        歡迎來到幸運抽籤轉盤！
+    </div>
+
+    <div class="tutorial-description" id="tutorialDescription">
+        第一次遊玩嗎？
+        接下來會帶你認識轉盤，完成簡單的操作教學。
+    </div>
+
+    <div class="tutorial-progress" id="tutorialProgress">
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+    </div>
+
+    <button class="tutorial-button" id="tutorialButton">
+        開始教學
+    </button>
+
+    <div class="tutorial-hint" id="tutorialHint">
+        跟著步驟完成操作即可
+    </div>
+
+</div>
+
 <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const spinBtn = document.getElementById('spinBtn');
-    const updateBtn = document.getElementById('updateBtn');
-    const optionsTextarea = document.getElementById('options');
-    const statusDiv = document.getElementById('status');
-    const resultModal = document.getElementById('resultModal');
-    const winnerText = document.getElementById('winnerText');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-    let options = [];
-    const colors = ['#87CEFA', '#Eecc68', '#D81B60', '#FFE4B5', '#FFB6C1', '#C1E1C1', '#E6E6FA', '#FF69B4'];
-    const lightColors = ['#FFF700', '#FF0000', '#00BFFF', '#32CD32', '#FFFFFF'];
-    
-    let startAngle = 0;
-    let arc = 0;
-    let spinTimeout = null;
-    let spinAngleStart = 10;
-    let spinTime = 0;
-    
-    const CONSTANT_SPEED_TIME = 3000; // 精準維持 5 秒最高速
-    const DECELERATION_TIME = 2000;    // 1.5 秒內減速煞車
-    let spinTimeTotal = CONSTANT_SPEED_TIME + DECELERATION_TIME; 
+const spinBtn = document.getElementById('spinBtn');
+const winnerDiv = document.getElementById('winner');
 
-    let lightTick = 0;
+const resultOverlay = document.getElementById('resultOverlay');
+const resultText = document.getElementById('resultText');
 
-    function getOptions() {
-        options = optionsTextarea.value.split(/[,\n]/).map(s => s.trim()).filter(s => s.length > 0);
-        arc = Math.PI / (options.length / 2);
-        drawWheel();
-    }
+/* ===== 新手教學 DOM ===== */
 
-    function drawWheel() {
-        if (options.length === 0) return;
-        ctx.clearRect(0, 0, 550, 550);
-        
-        const cx = 275, cy = 275;
-        const outerR = 250; 
-        const wheelR = 225; 
+const tutorialCard = document.getElementById('tutorialCard');
+const tutorialStep = document.getElementById('tutorialStep');
+const tutorialTitle = document.getElementById('tutorialTitle');
+const tutorialDescription = document.getElementById('tutorialDescription');
+const tutorialProgress = document.getElementById('tutorialProgress');
+const tutorialButton = document.getElementById('tutorialButton');
+const tutorialHint = document.getElementById('tutorialHint');
 
-        // 1. 外圍深藍色裝飾圈
-        ctx.fillStyle = "#4A6FA5";
-        ctx.beginPath();
-        ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
-        ctx.fill();
+let tutorialActive = true;
+let tutorialStage = 0;
 
-        // 2. 內部各個馬卡龍色扇形
-        for(let i = 0; i < options.length; i++) {
-            const angle = startAngle + i * arc;
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.arc(cx, cy, wheelR, angle, angle + arc, false);
-            ctx.lineTo(cx, cy);
-            ctx.fill();
+/* 教學畫面更新 */
+function showTutorial(stage) {
+    tutorialStage = stage;
 
-            // 畫扇形內的文字
-            ctx.save();
-            ctx.fillStyle = "#333333";
-            ctx.font = "bold 16px sans-serif";
-            ctx.translate(cx + Math.cos(angle + arc / 2) * (wheelR * 0.65), cy + Math.sin(angle + arc / 2) * (wheelR * 0.65));
-            ctx.rotate(angle + arc / 2 + Math.PI / 2);
-            const text = options[i];
-            ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
-            ctx.restore();
-        }
+    tutorialCard.classList.remove('hidden');
 
-        // 3. 外圍跑馬燈
-        const totalLights = 40; 
-        lightTick++;
-        for (let i = 0; i < totalLights; i++) {
-            const angle = (i / totalLights) * Math.PI * 2;
-            const lx = cx + Math.cos(angle) * (outerR - 12);
-            const ly = cy + Math.sin(angle) * (outerR - 12);
+    canvas.classList.remove('tutorial-highlight');
+    spinBtn.classList.remove('tutorial-highlight');
 
-            let colorIndex = (i + Math.floor(lightTick / 5)) % lightColors.length;
-            ctx.fillStyle = lightColors[colorIndex];
-            
-            ctx.shadowBlur = 6;
-            ctx.shadowColor = lightColors[colorIndex];
+    const dots = tutorialProgress.querySelectorAll('.progress-dot');
 
-            if (i % 2 === 0) {
-                ctx.beginPath();
-                ctx.arc(lx, ly, 5, 0, Math.PI * 2);
-                ctx.fill();
-            } else {
-                ctx.strokeStyle = lightColors[colorIndex];
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(lx - 5, ly); ctx.lineTo(lx + 5, ly);
-                ctx.moveTo(lx, ly - 5); ctx.lineTo(lx, ly + 5);
-                ctx.stroke();
-            }
-            ctx.shadowBlur = 0; 
-        }
-
-        // 4. 中心 DTD 標誌圓心
-        ctx.fillStyle = "#4A6FA5"; 
-        ctx.beginPath();
-        ctx.arc(cx, cy, 42, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#FFFFFF"; 
-        ctx.beginPath();
-        ctx.arc(cx, cy, 38, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.save();
-        ctx.fillStyle = "#1e90ff"; 
-        ctx.font = "bold 24px 'Arial Black', sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.shadowBlur = 2;
-        ctx.shadowColor = "rgba(0,0,0,0.2)";
-        ctx.fillText("DTD", cx, cy + 2); 
-        ctx.restore();
-
-        // 5. 上方固定紅色小指針
-        ctx.fillStyle = "#ff4757";
-        ctx.beginPath();
-        ctx.moveTo(cx - 15, cy - outerR - 5);
-        ctx.lineTo(cx + 15, cy - outerR - 5);
-        ctx.lineTo(cx, cy - outerR + 25);
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    setInterval(() => {
-        if (spinTimeout === null) {
-            drawWheel();
-        }
-    }, 40);
-
-    function rotateWheel() {
-        spinTime += 16; 
-        if(spinTime >= spinTimeTotal) {
-            stopRotateWheel();
-            return;
-        }
-        
-        let currentSpeed;
-        if (spinTime < CONSTANT_SPEED_TIME) {
-            currentSpeed = spinAngleStart;
-        } else {
-            const decelElapsedTime = spinTime - CONSTANT_SPEED_TIME;
-            currentSpeed = spinAngleStart - easeOut(decelElapsedTime, 0, spinAngleStart, DECELERATION_TIME);
-        }
-
-        startAngle += (currentSpeed * Math.PI / 180);
-        drawWheel();
-        spinTimeout = setTimeout(rotateWheel, 16); 
-    }
-
-    function stopRotateWheel() {
-        clearTimeout(spinTimeout);
-        spinTimeout = null;
-        const degrees = startAngle * 180 / Math.PI + 90;
-        const ardegrees = arc * 180 / Math.PI;
-        const index = Math.floor((360 - (degrees % 360)) / ardegrees);
-        const finalResult = options[(index + options.length) % options.length];
-        
-        // 1. 清空底下小狀態
-        statusDiv.innerHTML = "";
-        // 2. 將抽中內容塞入正中央彈窗
-        winnerText.innerHTML = finalResult;
-        // 3. 啟動螢幕正中央的遮罩彈窗
-        resultModal.classList.add('active');
-        
-        spinBtn.disabled = false;
-    }
-
-    function closeModal() {
-        resultModal.classList.remove('active');
-    }
-
-    function easeOut(t, b, c, d) {
-        const ts = (t /= d) * t;
-        const tc = ts * t;
-        return b + c * (tc + -3 * ts + 3 * t);
-    }
-
-    spinBtn.addEventListener('click', () => {
-        if (options.length === 0) return;
-        statusDiv.innerHTML = "🔥 5秒超極速維持中！！！";
-        spinBtn.disabled = true;
-        spinAngleStart = Math.random() * 15 + 85; 
-        spinTime = 0;
-        rotateWheel();
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === stage - 1);
     });
 
-    updateBtn.addEventListener('click', getOptions);
-    getOptions();
+    if (stage === 0) {
+        tutorialStep.textContent = "新手教學";
+        tutorialTitle.textContent = "歡迎來到幸運抽籤轉盤！";
+        tutorialDescription.innerText =
+            "第一次遊玩嗎？\n接下來會帶你認識轉盤，完成簡單的操作教學。";
+
+        tutorialButton.textContent = "開始教學";
+        tutorialButton.style.display = "block";
+        tutorialHint.textContent = "跟著步驟完成操作即可";
+    }
+
+    if (stage === 1) {
+        tutorialStep.textContent = "STEP 1 / 4";
+        tutorialTitle.textContent = "認識幸運轉盤";
+        tutorialDescription.innerText =
+            "這就是幸運抽籤轉盤！\n轉盤上有不同的選項，旋轉停止後會隨機抽出一個結果。";
+
+        tutorialButton.textContent = "下一步";
+        tutorialButton.style.display = "block";
+        tutorialHint.textContent = "先認識一下轉盤的樣子";
+
+        canvas.classList.add('tutorial-highlight');
+    }
+
+    if (stage === 2) {
+        tutorialStep.textContent = "STEP 2 / 4";
+        tutorialTitle.textContent = "試著開始旋轉";
+        tutorialDescription.innerText =
+            "點擊下方的「開始旋轉」按鈕，\n讓轉盤開始抽籤吧！";
+
+        tutorialButton.style.display = "none";
+        tutorialHint.textContent = "請親自點擊下方的開始旋轉按鈕";
+
+        spinBtn.classList.add('tutorial-highlight');
+    }
+
+    if (stage === 3) {
+        tutorialStep.textContent = "STEP 3 / 4";
+        tutorialTitle.textContent = "查看抽籤結果";
+        tutorialDescription.innerText =
+            "轉盤已經停止，畫面會顯示抽中的選項。\n請點擊中獎視窗，關閉結果畫面。";
+
+        tutorialButton.style.display = "none";
+        tutorialHint.textContent = "點擊中獎視窗即可繼續";
+    }
+
+    if (stage === 4) {
+        tutorialStep.textContent = "STEP 4 / 4";
+        tutorialTitle.textContent = "教學完成！";
+        tutorialDescription.innerText =
+            "你已經學會如何使用幸運抽籤轉盤。\n現在可以開始自由抽籤了！";
+
+        tutorialButton.textContent = "開始自由遊玩";
+        tutorialButton.style.display = "block";
+        tutorialHint.textContent = "祝你抽到想要的結果！";
+    }
+}
+
+/* 教學按鈕 */
+tutorialButton.addEventListener('click', () => {
+    if (!tutorialActive) return;
+
+    if (tutorialStage === 0) {
+        showTutorial(1);
+    } else if (tutorialStage === 1) {
+        showTutorial(2);
+    } else if (tutorialStage === 4) {
+        tutorialActive = false;
+        tutorialCard.classList.add('hidden');
+
+        canvas.classList.remove('tutorial-highlight');
+        spinBtn.classList.remove('tutorial-highlight');
+    }
+});
+
+/* 載入中央人物圖片 */
+const centerImage = new Image();
+centerImage.src = "center.png";
+
+centerImage.onload = () => {
+    drawWheel();
+};
+
+centerImage.onerror = () => {
+    console.error("無法載入 center.png，請確認圖片與 HTML 位於同一資料夾。");
+};
+
+let options = [
+    "選項一",
+    "選項二",
+    "選項三",
+    "選項四",
+    "選項五",
+    "選項六",
+    "選項七",
+    "選項八"
+];
+
+/* 轉盤扇形配色 */
+const colors = [
+    '#F4C7D5',
+    '#F6D9C8',
+    '#F8E8B8',
+    '#D8E8D5',
+    '#D5E5F2',
+    '#DDD5EB',
+    '#EBCFD8',
+    '#F3E1D2'
+];
+
+/* 外圍跑馬燈 */
+const lightColors = [
+    '#FFE6A7',
+    '#FFFFFF',
+    '#F4B8CC',
+    '#D5E5F2',
+    '#F8D9B8'
+];
+
+let startAngle = 0;
+let arc = Math.PI / (options.length / 2);
+let spinTimeout = null;
+let spinAngleStart = 10;
+let spinTime = 0;
+
+const CONSTANT_SPEED_TIME = 3000;
+const DECELERATION_TIME = 2000;
+const spinTimeTotal = CONSTANT_SPEED_TIME + DECELERATION_TIME;
+
+let lightTick = 0;
+
+/* 繪製轉盤 */
+function drawWheel() {
+    if (options.length === 0) return;
+
+    ctx.clearRect(0, 0, 550, 550);
+
+    const cx = 275;
+    const cy = 275;
+    const outerR = 250;
+    const wheelR = 225;
+
+    /* 外圍裝飾圈 */
+    ctx.fillStyle = "#E8B5C5";
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* 扇形區域 */
+    for (let i = 0; i < options.length; i++) {
+        const angle = startAngle + i * arc;
+
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, wheelR, angle, angle + arc, false);
+        ctx.lineTo(cx, cy);
+        ctx.fill();
+
+        /* 扇形文字 */
+        ctx.save();
+        ctx.fillStyle = "#70545F";
+        ctx.font = "bold 16px sans-serif";
+
+        ctx.translate(
+            cx + Math.cos(angle + arc / 2) * (wheelR * 0.65),
+            cy + Math.sin(angle + arc / 2) * (wheelR * 0.65)
+        );
+
+        ctx.rotate(angle + arc / 2 + Math.PI / 2);
+
+        const text = options[i];
+        ctx.fillText(
+            text,
+            -ctx.measureText(text).width / 2,
+            0
+        );
+
+        ctx.restore();
+    }
+
+    /* 外圍跑馬燈 */
+    const totalLights = 40;
+    lightTick++;
+
+    for (let i = 0; i < totalLights; i++) {
+        const angle = (i / totalLights) * Math.PI * 2;
+
+        const lx = cx + Math.cos(angle) * (outerR - 12);
+        const ly = cy + Math.sin(angle) * (outerR - 12);
+
+        const colorIndex =
+            (i + Math.floor(lightTick / 5)) % lightColors.length;
+
+        ctx.fillStyle = lightColors[colorIndex];
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = lightColors[colorIndex];
+
+        if (i % 2 === 0) {
+            ctx.beginPath();
+            ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = lightColors[colorIndex];
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(lx - 5, ly);
+            ctx.lineTo(lx + 5, ly);
+            ctx.moveTo(lx, ly - 5);
+            ctx.lineTo(lx, ly + 5);
+            ctx.stroke();
+        }
+
+        ctx.shadowBlur = 0;
+    }
+
+    /* 中央人物圖片底框 */
+    ctx.fillStyle = "#E8B5C5";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 52, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#FFF7F8";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* 顯示人物圖片，保留透明背景 */
+    if (centerImage.complete && centerImage.naturalWidth > 0) {
+        ctx.drawImage(
+            centerImage,
+            cx - 30,
+            cy - 33.65,
+            60,
+            67.3
+        );
+    }
+
+    /* 上方固定指針 */
+    ctx.fillStyle = "#D8799A";
+    ctx.beginPath();
+    ctx.moveTo(cx - 15, cy - outerR - 5);
+    ctx.lineTo(cx + 15, cy - outerR - 5);
+    ctx.lineTo(cx, cy - outerR + 25);
+    ctx.closePath();
+    ctx.fill();
+}
+
+/* 待機時燈光閃爍 */
+setInterval(() => {
+    if (spinTimeout === null) {
+        drawWheel();
+    }
+}, 40);
+
+/* 轉盤旋轉 */
+function rotateWheel() {
+    spinTime += 16;
+
+    if (spinTime >= spinTimeTotal) {
+        stopRotateWheel();
+        return;
+    }
+
+    let currentSpeed;
+
+    if (spinTime < CONSTANT_SPEED_TIME) {
+        currentSpeed = spinAngleStart;
+    } else {
+        const decelElapsedTime = spinTime - CONSTANT_SPEED_TIME;
+
+        currentSpeed = spinAngleStart -
+            easeOut(
+                decelElapsedTime,
+                0,
+                spinAngleStart,
+                DECELERATION_TIME
+            );
+    }
+
+    startAngle += currentSpeed * Math.PI / 180;
+
+    drawWheel();
+
+    spinTimeout = setTimeout(rotateWheel, 16);
+}
+
+/* 停止並顯示中獎視窗 */
+function stopRotateWheel() {
+    clearTimeout(spinTimeout);
+    spinTimeout = null;
+
+    const degrees = startAngle * 180 / Math.PI + 90;
+    const ardegrees = arc * 180 / Math.PI;
+
+    const index = Math.floor(
+        (360 - (degrees % 360)) / ardegrees
+    );
+
+    const finalResult =
+        options[(index + options.length) % options.length];
+
+    /* 顯示抽中選項 */
+    resultText.textContent = finalResult;
+    resultOverlay.classList.add('show');
+
+    spinBtn.disabled = false;
+
+    /* 教學進入結果步驟 */
+    if (tutorialActive && tutorialStage === 2) {
+        showTutorial(3);
+    }
+}
+
+/* 減速動畫 */
+function easeOut(t, b, c, d) {
+    const ts = (t /= d) * t;
+    const tc = ts * t;
+
+    return b + c * (tc + -3 * ts + 3 * t);
+}
+
+/* 開始抽籤 */
+spinBtn.addEventListener('click', () => {
+    if (options.length === 0 || spinTimeout !== null) return;
+
+    /* 教學期間必須依照步驟操作 */
+    if (tutorialActive && tutorialStage !== 2) return;
+
+    winnerDiv.textContent = "";
+    spinBtn.disabled = true;
+
+    spinAngleStart = Math.random() * 15 + 85;
+    spinTime = 0;
+
+    rotateWheel();
+});
+
+/* 點擊中獎視窗關閉 */
+resultOverlay.addEventListener('click', () => {
+    resultOverlay.classList.remove('show');
+
+    /* 教學期間，關閉結果視窗後進入最後一步 */
+    if (tutorialActive && tutorialStage === 3) {
+        showTutorial(4);
+    }
+});
+
+/* 初始化 */
+drawWheel();
+showTutorial(0);
+
 </script>
+
 </body>
 </html>
